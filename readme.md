@@ -239,6 +239,42 @@ console.log(`Data in myarray with map ${res}`);
 console.log(`Data in myarray with map ${myarray}`);
 ```
 
+1. Code Splitting aka Modlarity, Model-View-ViewModel (MVVM) and Model-View-Contrller (MVC)
+   1. Object Oriented Programming
+      1. Divide the logic across various Classes specific to requirement
+      2. Class with Constructor where 'constructor()' is a method
+         1. All public properties or Data memebrs willbe declared inside class using 'this.' prefix (No public Access Specifier hence no private or protected).
+         2. No class level declarations for Data Members 
+         3. The data members must be initialized in the constructor()
+      3. No-Oveloading of methods
+         1. Instead use
+            1. The default 'arguments' array of JavaScript for methods parameters
+            2. Use an empty array as method parameters
+            3. Use 'spread operator' aka 'rest parameters' to pass variable number of parameters to method (in ES6)
+               1. This is simpler syntax for creating an immutable object
+                  1. enhance the same object with new properties and values
+      4. Use 'extends' to implement inheritence
+2. How to create modules in ES 6 Hight Level JavaScript
+   1. Module is a reusable set of code that is written or split in separat JavaScript files 
+   2. This allows the code-Spliting for maintenence
+   3. Developer can decide what is exposed from the module using 'export' keyword
+      1. class, function, constant can be exported from module theyb are also knowsn as 'exported types'
+   4. These exported types need to be imported in caller module using 'import' keyword
+   5. Use of Module Loaders to exzecute the Modules in ES 6 in Browser
+      1. Module loaders  are Applications those are used to discover / parse / validate the module code ands execute it
+         1. Systemjs
+         2. WebPack
+            1. React.js , Angular, View, etc.
+         3. CommonJs
+
+
+
+High Responsive Behavior
+Object Mutations with adding number ofproperties
+
+Dynamic Generation of UI
+
+
 # Hands-on lab
 1. Create an array of strings and perform following operations (Immediate)
    1. Sort and Reverse the array  (sort and revrese functions) 
@@ -257,3 +293,7 @@ Perform following operations on it
    - find out how many times word 'in' ,'and', 'the' occures in the string
    - find out number of blank spaces in it
    - Change the string in Title case (first character of each word in Upper case)
+
+4. Create a HTML Page thet will accept Product Details like ProductId, ProductName, CategoryName, Manufacturer, Description and BasePrice from UI. Perform following opertaions from UI
+   1. Make sure that the ProductId is not repeated. So when end-use enter the ProductId in TextBox and press Tab immediately the validation must be check
+   2. Write Classes to perform all these calls 

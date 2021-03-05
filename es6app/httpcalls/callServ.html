@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./callServ.js"></script>
+    <script>
+        window.onload = function(){
+
+            var btn = document.getElementById('btnCall');  
+
+          //  btn.addEventListener('click',function(){
+           //     var responseData = [];
+             //   responseData = getData();
+               // document.getElementById('dv').innerHTML = JSON.stringify(responseData);
+            //});
+
+            btn.addEventListener('click',function(){
+               // the 'then()' is success method of Prmoise object
+               // the 'catch()' is failure method of the Promise Object 
+                getData().then(function(response){
+                    document.getElementById('dv').innerHTML = JSON.stringify(response);
+                }).catch(function(error){
+                    document.getElementById('dv').innerHTML = error;
+                });
+               
+            });
+          
+            var btn = document.getElementById('btnPost');  
+            btn.addEventListener('click',function(){
+               
+                postData({
+                    ProductRowId:0,
+                    ProductId:'Prd009',
+                    ProductName: 'Kindle',
+                    CategoryName: 'Electronics',
+                    Manufacturer: 'Amazon',
+                    Description: '10inches e-book reader',
+                    BasePrice:34000
+                }).then(function(response){
+                     document.getElementById('dv').innerHTML = JSON.stringify(response);
+                 }).catch(function(error){
+                     document.getElementById('dv').innerHTML = error;
+                 });
+                
+             });
+
+        }
+    </script>
+</head>
+<body>
+      <h3>Calling HTTP Srevice</h3>
+      
+      <input type="button" value="Call" id="btnCall">
+      <hr>
+      <input type="button" value="Post" id="btnPost">
+      <hr>
+      <div>
+          Received data from Service
+         <div id="dv"></div>
+      </div>
+</body>
+</html>
