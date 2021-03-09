@@ -50,7 +50,35 @@
 6. Array and String Enhancements by adding new methods
 7. New Collections
    1. Set
+      1. A Hash set that manages the unique value store in the collection
+         1. The 'Set' class
+            1. add(), to add enrty
+            2. forEach() for iterations
+            3. has(), to check if the entry is present in Set
+            4. delete(), to remove an entry from Set
+            5. clear(), to delete all entries from Set
+         2. Use this data structure when search of data is carried out with fast speed 
+         3. Frequest Store of Records
+            1. Array Vs Set
+               1. Array cannot have duplicate check, it can store duplicate values
+               2. Array can be easily extended by adding new records w/o checking for any duplicate entries
+               3. Set cannot store duplicate value or entry
+               4. Since Set keeps varifying the existance of the entry befor adding new entry in it, the 'add()' operation is  slower that 'push()' operation of array 
+               5. Set is a special data structure wrriten on the top of array for
+                  1. Fast Search using 'has()'
+                  2. Efficient clean-up of Set using 'clear()'
+                  3. Efficient delete of enrtuy using 'delete()'
    2. Map
+      1. Like Dictionary
+      2. Data is stored in Key/Value Pair
+      3. Methods
+         1. The 'set()' to add record in dictionay
+         2. The 'get()' to retrieve record for specific 'key'
+         3. The 'entries()' to read entried from Map
+         4. The 'has()' to chek if the key present in the Map
+         5. The 'delete()' to remove entry from Map basaed on key
+         6. The 'forEach()' to iterate over the Map
+         7. The 'clear()' to clear all entries
 8. Object Oriented Programming  
 9. Modularity
    1.  Export
@@ -58,7 +86,15 @@
 10. Modern ES 6 Features
    3. Promises
    4. async / await
+11. Generators
+    1.  They are the * marked functions, used to iterate over the collection to read a record, return it (called as ''yield ) and move to next record till end-of-collection is not reached
+    2.  Stnatx
+        1.  function* Name() { yield value;  }
     
+
+
+
+
 # Languages supporing ES 6
 
 1. High-Level JavaScript aka Modern JavaScript
