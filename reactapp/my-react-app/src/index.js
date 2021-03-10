@@ -4,14 +4,15 @@ import ReactDOM from 'react-dom';
 
 // importing CSS
 import './index.css';
-// import './node_modules/bootstrap/dist/css/bootstrap.min.css';
+
+import './../node_modules/bootstrap/dist/css/bootstrap.min.css';
 // imporing the other Exportable types from  other files
 import App from './App';
 // the React.js bundling and build utility provided by create-react-app
 import reportWebVitals from './reportWebVitals';
 
 import SimpleComponent from './components/simplecomponent/simplecomponent';
-
+import EmployeeComponent from './components/employeecomponent/employeecomponent';
 // this will mount the component with its 
 // compiled HTML on Browser and render it
 // React.StrictMode, means that the string JS language
@@ -31,7 +32,7 @@ let parentMessage = "Hay Componant!!! I am message from Parent";
 
 ReactDOM.render(
   <React.StrictMode>
-    <SimpleComponent message={parentMessage} val1={'Mahesh Sabnis'}/> 
+    <EmployeeComponent/> 
   </React.StrictMode>,
   document.getElementById('root')
 );

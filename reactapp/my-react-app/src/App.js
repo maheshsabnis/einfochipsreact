@@ -1,6 +1,5 @@
 import logo from './logo.svg';
 import './App.css';
-
 // functional component
 // returning HTML DOM
 function App() {

@@ -79,7 +79,12 @@
                   1. KEY is property name
                   2. VALUE is value of the property
             3. To change the state property based on event, define an event to HTML element e.g. 'onChange' for input:text element and in the event handler use 'this.setState()'  method to update state property 
-               1. this.setState({'<STATE-PROPERTY>': <NEW_VALEU>})
+               1. this.setState({'<STATE-PROPERTY>': <NEW_VALEU>}, ()=>{})
+                  - the second parameter is callback function that will be used to commit the state mutation
+               2. NOTE: We cannot setState() or mutate the state insode the constructor
+               3. To steState() of the complext state property use the  'componentDidMount()' method
+                  - THis is a lifecycle method that contains logic for mutation of the state object instead of writing in constructor 
+                  - This methiod will be executed after the 'render()' method   
          3. render()
             1. This method return HTML DOM for the component 
 
@@ -206,8 +211,13 @@ class FirstChildComponent extends Component {
 }
 
 ```
-         4. Parent-Child Communication
-         5. Component's Reusability
+  VERY IMP: The State property cannot be mutated (updated with new value) using assignment statement or by pushing value in it if it is an array. Instead always use the 'setState()' method to mutate the state property.
+  Unless setState() is used for mutation, the UI (or virtuakl DOM) will not be updated
+   4. The React's Compositional Pattern  
+      - Divide the Complex UI into small re-usable components
+         - These will be used for creating similar UX across various parent components but with similar or differnt data sources
+         - All re-usable components will act as a child of its parent and parent will pass data to them so that they are rendered and implemented as Parent-Child Communication with Component's Reusability
+
       2. Lifecyle
       3. AJAX
       4. Routing
@@ -234,3 +244,12 @@ class FirstChildComponent extends Component {
 
 # Hands on Lab
 1. Create a Calculator same same UI and functionality like the WIndows Calculator 
+2. Create a TableComponent that will accept following props types
+   - The 'DataSource' (Mandatory)
+      - This will be of the array type based on which the Columns (headers) and Rowes for table will be generated
+   - The 'SelectRow' (Mandatory)
+      - This will raise the click event on table row so that the selected row value will be emitted to the parent
+   - Make sure  that the table will be generated only when the length of DataSource > 0 (Mandatory)
+   - The 'CanDelete' property
+      - If this property is true then each row will generate the Button for deleting the row (optional) 
+
