@@ -252,4 +252,6 @@ class FirstChildComponent extends Component {
    - Make sure  that the table will be generated only when the length of DataSource > 0 (Mandatory)
    - The 'CanDelete' property
       - If this property is true then each row will generate the Button for deleting the row (optional) 
+   - Generate a Checkbox for each row in the table and also generate checkbox in the header row. If the header checkbox is checked then checkbox for each row must ne checked or unchecked 
+   - Define a 'pageSize' prop type for the table to show default number of rows in table and then add a dropdown in the table footer to change the pageSize by shown rows based on selected value for rows in dropdown     
 

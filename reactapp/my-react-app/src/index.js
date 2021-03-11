@@ -13,6 +13,8 @@ import reportWebVitals from './reportWebVitals';
 
 import SimpleComponent from './components/simplecomponent/simplecomponent';
 import EmployeeComponent from './components/employeecomponent/employeecomponent';
+import ParentComponent from './components/lifecyclecomponents/lifecyclecomponent';
+
 // this will mount the component with its 
 // compiled HTML on Browser and render it
 // React.StrictMode, means that the string JS language
@@ -32,7 +34,7 @@ let parentMessage = "Hay Componant!!! I am message from Parent";
 
 ReactDOM.render(
   <React.StrictMode>
-    <EmployeeComponent/> 
+    <ParentComponent/> 
   </React.StrictMode>,
   document.getElementById('root')
 );

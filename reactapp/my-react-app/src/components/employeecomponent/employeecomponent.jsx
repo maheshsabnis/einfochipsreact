@@ -3,6 +3,7 @@ import { Logic } from "./../../models/logic";
 import { Departments,Designations } from "./../../models/constants";
 // impport other component
 import DropDownComponent from './../reusablecomponents/dropdowncomponent';
+import  DataTableComponent  from "./../reusablecomponents/datatablecomponent";
 class EmployeeComponent extends Component {
       constructor(props){
           super(props);
@@ -14,7 +15,8 @@ class EmployeeComponent extends Component {
                 Salary:0,
                 departments:Departments, // values from comstanats
                 designations:Designations, // values from comstanats
-                employees:[]
+                employees:[],
+                canShow:false
           };
           this.logic =new Logic();
 
@@ -63,7 +65,13 @@ class EmployeeComponent extends Component {
     getSelectedDesignation(val){
         this.setState({Designation:val});
     }
-
+    getSelectedEmployee(e){
+        this.setState({EmpNo:e.EmpNo});
+        this.setState({EmpName:e.EmpName});
+        this.setState({DeptName:e.DeptName});
+        this.setState({Designation:e.Designation});
+        this.setState({Salary:e.Salary});
+    }
     render() { 
         return ( 
             <div className="container">
@@ -124,8 +132,11 @@ class EmployeeComponent extends Component {
                   onClick={this.save.bind(this)}/>
                 </div>
                 <br/>
-                <div className="container">
-                       {JSON.stringify(this.state.employees)}
+                <div className="container" >
+                       <DataTableComponent
+                       DataSource={this.state.employees}
+                       selectedRowValue={this.getSelectedEmployee.bind(this)}
+                       canDelete={true}></DataTableComponent>
                 </div>       
             </div>
         );
