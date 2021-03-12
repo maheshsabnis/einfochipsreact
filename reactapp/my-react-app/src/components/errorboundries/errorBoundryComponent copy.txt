@@ -1,0 +1,66 @@
+ 
+import React, { Component } from 'react';
+
+class MyCounterComponent extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {  
+            counter:0
+        };
+    }
+
+    increament=()=>{
+        this.setState({counter: this.state.counter+1});
+    }
+    render() { 
+       try {
+            if(this.state.counter > 8) {
+                throw new Error('Max value reached....');
+            } else {
+                return (  
+                    <div className="container">
+                        <strong>
+                            The Coubter Value is = {this.state.counter}
+                        </strong>      
+                        <br/>
+                        <input type="button" value="Increament"
+                        onClick={this.increament.bind(this)}/>
+                    </div>
+                );
+            }
+       }catch (e){
+        return (  
+            <div className="container">
+                <strong>
+                    An Exception Has been thrown {e.message}
+                </strong>       
+            </div>
+        );
+       }
+       
+    }
+}
+ 
+class ContainerComponent extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {  }
+    }
+    reload=()=>{
+        window.history.go(0);
+    }
+    render() { 
+        return ( 
+            <div className="container">
+              <MyCounterComponent></MyCounterComponent>
+              <hr/>
+              <input type="button" value="Reload"
+               onClick={this.reload.bind(this)}/>
+            </div>
+         );
+    }
+}
+ 
+export default ContainerComponent;
+
+ 

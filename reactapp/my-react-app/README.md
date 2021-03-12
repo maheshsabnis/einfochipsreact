@@ -218,10 +218,135 @@ class FirstChildComponent extends Component {
          - These will be used for creating similar UX across various parent components but with similar or differnt data sources
          - All re-usable components will act as a child of its parent and parent will pass data to them so that they are rendered and implemented as Parent-Child Communication with Component's Reusability
 
+``` javascript
+ 
+import React, { Component } from 'react';
+
+class GlobalErrorHandlerComponent extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {  
+            errorMessage:''
+        };
+    }
+
+
+    // listen to actual error message from any child component in tree
+    // the 'error' parameter represents the error thrown 
+    // this property will internally perform 'setState()' operation
+    // for the 'errorMessage' when an exception is ocured  
+    static getDerivedStateFromError(error){
+        return {
+            errorMessage: error.toString()
+        };
+    }
+
+    // method responsible for listening and loggin errors
+    componentDidCatch=(error, logInfo)=>{
+        console.log(error.toString(), logInfo.componentStack);
+    }
+    render() {
+        if(this.state.errorMessage) {
+            // fallback UI goes here 
+        return ( 
+            <div className="container">
+                <h5>Something has gone wrong</h5>
+                <strong>
+                  {
+                      this.state.errorMessage
+                  }
+                </strong>
+            </div>
+         );
+        }
+        // otherwise keep rendering all children in the Tree
+        return this.props.children;
+    }
+}
+ 
+ 
+
+
+class MyCounterComponent extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {  
+            counter:0
+        };
+    }
+
+    increament=()=>{
+        this.setState({counter: this.state.counter+1});
+    }
+    render() { 
+                if(this.state.counter > 8) {
+                     throw new Error('Sorry You have reached to max clicks');   
+                } else{   
+                return (  
+                    <div className="container">
+                        <strong>
+                            The Coubter Value is = {this.state.counter}
+                        </strong>      
+                        <br/>
+                        <input type="button" value="Increament"
+                        onClick={this.increament.bind(this)}/>
+                    </div>
+                );
+            }
+    }
+}
+ 
+class ContainerComponent extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {  }
+    }
+    reload=()=>{
+        window.history.go(0);
+    }
+    render() { 
+        return ( 
+            <div className="container">
+                <GlobalErrorHandlerComponent>
+                  <MyCounterComponent></MyCounterComponent>
+                </GlobalErrorHandlerComponent>
+              <hr/>
+              <input type="button" value="Reload"
+               onClick={this.reload.bind(this)}/>
+            </div>
+         );
+    }
+}
+ 
+export default ContainerComponent;
+
+ 
+```
+
+   5. Line-of-Business (LOB) UI for React Component
+      - Using the Forms with validations
+         - No Standard Validator Support available
+         - Use of HTML 5 Validation Attrobutes is not preferred
+         - Define Custom Logic for Valdiations 
+         - Create a vlidator class that validates Employee Component based on following rules
+            - EmpNo must ne Unique
+            - EmpName mist start from Capital Letter
+            - If DeptName is IT then Salart must be min 20000
+               - for HRL min salary 18K
+               - SALES min salary 10K
+            - Change the border of Invalid UI elements to RED and create a validation summury atbthe bottom. 
+               - Create a Custom reusable Component for showin Validation summary
+            - make sure that the required elements must have red border when the component is loaded   
+      - AJAX Calls
+
       2. Lifecyle
       3. AJAX
       4. Routing
-      5. Error Boundries
+      5. Error Boundries (React.js 16.0+)
+         - The Error Country is an approach for handling exceptions globally using 'Error Handler Component' to handle and log errors occure in anyb child component during the rendering
+         - This Error Handler Component will have following
+            - Implementation of 'componentDidCatch()' method to catch exception occures in any child component
+            - Implementation of getDertivedStateFromError () read-only property to listen to errors so that they can be logged 
       6. Code-Spliting
       7. Hight-Order-Components
    2. Funtional Conponents

@@ -15,6 +15,8 @@ import SimpleComponent from './components/simplecomponent/simplecomponent';
 import EmployeeComponent from './components/employeecomponent/employeecomponent';
 import ParentComponent from './components/lifecyclecomponents/lifecyclecomponent';
 
+import ContainerComponent from './components/errorboundries/errorBoundryComponent';
+import EmployeeValidationComponent from './components/validationcomponent/employeecomponentvalid';
 // this will mount the component with its 
 // compiled HTML on Browser and render it
 // React.StrictMode, means that the string JS language
@@ -34,7 +36,7 @@ let parentMessage = "Hay Componant!!! I am message from Parent";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ParentComponent/> 
+    <EmployeeValidationComponent/> 
   </React.StrictMode>,
   document.getElementById('root')
 );

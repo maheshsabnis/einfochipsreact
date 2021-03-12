@@ -1,6 +1,15 @@
 .App {
   text-align: center;
 }
+/*
+  set the display iframe to 'none' so that
+  the default error frame will not be rendered.
+  This is default iframe by react-scripts that prenvents
+  an execution of the Error Boundry
+*/
+iframe {
+  display: none;
+}
 
 .App-logo {
   height: 40vmin;
