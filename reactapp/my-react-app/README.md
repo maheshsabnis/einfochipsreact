@@ -328,19 +328,37 @@ export default ContainerComponent;
          - No Standard Validator Support available
          - Use of HTML 5 Validation Attrobutes is not preferred
          - Define Custom Logic for Valdiations 
-         - Create a vlidator class that validates Employee Component based on following rules
-            - EmpNo must ne Unique
-            - EmpName mist start from Capital Letter
-            - If DeptName is IT then Salart must be min 20000
-               - for HRL min salary 18K
-               - SALES min salary 10K
-            - Change the border of Invalid UI elements to RED and create a validation summury atbthe bottom. 
-               - Create a Custom reusable Component for showin Validation summary
-            - make sure that the required elements must have red border when the component is loaded   
-      - AJAX Calls
+         -
+      
 
       2. Lifecyle
       3. AJAX
+         - The 'fetch' object
+            - ES 6 object written over XmlHttpRequest object
+            - Purely Promise based
+         - The 'axios' object
+            - Promise based
+            - get()/post/()/put()/delete()
+            - retirns AxiosResponse with data in it
+               - Promise<AxiosResponse>
+               - AxiosResponse
+                  - Text, Json, Xml, html
+                  - Blob, ArrayBuffer, Stream
+            - npm install --save axios      
+```javascript
+  get<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R>;
+  delete<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R>;
+  head<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R>;
+  options<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R>;
+  post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
+  put<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
+```           
+
+config?: AxiosRequestConfig
+   - take header values
+      - e.g. Content-Type, Authorization, etc.
+
+
       4. Routing
       5. Error Boundries (React.js 16.0+)
          - The Error Country is an approach for handling exceptions globally using 'Error Handler Component' to handle and log errors occure in anyb child component during the rendering
@@ -379,4 +397,22 @@ export default ContainerComponent;
       - If this property is true then each row will generate the Button for deleting the row (optional) 
    - Generate a Checkbox for each row in the table and also generate checkbox in the header row. If the header checkbox is checked then checkbox for each row must ne checked or unchecked 
    - Define a 'pageSize' prop type for the table to show default number of rows in table and then add a dropdown in the table footer to change the pageSize by shown rows based on selected value for rows in dropdown     
+
+# Very Imporant Lab
+ Create a vlidator class that validates Employee Component based on following rules
+            - EmpNo must ne Unique
+            - EmpName mist start from Capital Letter
+            - If DeptName is IT then Salart must be min 20000
+               - for HRL min salary 18K
+               - SALES min salary 10K
+            - Change the border of Invalid UI elements to RED and create a validation summury atbthe bottom. 
+               - Create a Custom reusable Component for showin Validation summary
+            - make sure that the required elements must have red border when the component is loaded   
+
+1. Modify the ProductComponent for performing CRUD Operations using REST Call with axios. Make sure that the following validations are checked
+   - The ProductId must be Unique w.r.t. the REST API
+   - The Datab must be Shown in the Datatable having Delete button. When the delete button clicked the Request for deleing row must be initiated by the ProcuctComponent (not by DataTableComppnent)  
+      - The delete button will be displayed base on 'canDelete' props type
+      - ProductName mist start from Capital Letter      
+   - Add a serach textbox to search records based on ProductName / CategoryName / Manufacturer, this search textbox must be present in the ProductComponent but will be displayed above the DataTable     
 
