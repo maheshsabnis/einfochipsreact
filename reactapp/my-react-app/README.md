@@ -369,8 +369,30 @@ config?: AxiosRequestConfig
       7. Hight-Order-Components
    2. Funtional Conponents
       1. Concepts of Functional Component
+         - JavaScript Functions returning HTML DOM
+         - Categories of Function Components
+            - Close Type Function returning HTML DOM (generally used) 
+            - Components as function Expressions (Preferred from React 16.8+)
+               - Return DOM
+               - contains logic as expression 
+         - Constant Components Expressions with just HTML DOM and no logic
+         - React Hooks (Introduced in React 16.8) are the feature modifications in Functional components for
+            - Managing Local State
+            - Using Lifecycle like Class Components
+            - Working with Compositional components (aka component re-usability)
+            - Parent Child Relationships         
       2. Hooks
          1. State
+            - useState(initState, callback-To-Mutate-The-state)
+            - function useState<S>(initialState: S | (() => S)): [S, Dispatch<SetStateAction<S>>];
+               - the 'S' is the State Type
+                  - initialState, the initial value of the teh state
+                  - ()=>S
+                     - Mutate the state based on Event / logic
+                     -  Dispatch<SetStateAction<S>>
+                        - Dispatch, the Event Raised on Element thatb is bind with the state e.g. if UI element is inpue:text the Dispatch will be 'onChange'
+                        -  SetStateAction<S>
+                           - The Callback method that will be invoked for the event that will be used to mutate the state means overwrite or mutate previous state with new states 
          2. Context
          3. Effects
          4. Custom Hooks
@@ -416,3 +438,10 @@ config?: AxiosRequestConfig
       - ProductName mist start from Capital Letter      
    - Add a serach textbox to search records based on ProductName / CategoryName / Manufacturer, this search textbox must be present in the ProductComponent but will be displayed above the DataTable     
 
+
+2. Create a  Functional Component with State Hook to perform following operations
+    - Create Form that will store the ProductInfo e.g. ProductId, ProductName, CategoryName, Manufacturere, Price
+    - The CategoryName and Manufacturer are DropDown components
+    - Generate a Table showing the LIst of Products by creating a TableComponent using Functional Component
+      - This table component must provide facility to 'sort' product records whren the column is clicked
+      - The Table component can delete row based on CanDelete set to true

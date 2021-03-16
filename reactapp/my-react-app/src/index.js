@@ -20,6 +20,12 @@ import EmployeeValidationComponent from './components/validationcomponent/employ
 
 import HttpCallComponent from './components/httpcallcomponent/httpcallcomponent'
 
+import DemoComponent from './functionalcomponents/funcComponent';
+
+
+import SimpleHookComponent from './hooks/simplehookcomponent';
+
+import StateComponent  from './hooks/statecomponent';
 // this will mount the component with its 
 // compiled HTML on Browser and render it
 // React.StrictMode, means that the string JS language
@@ -39,7 +45,7 @@ let parentMessage = "Hay Componant!!! I am message from Parent";
 
 ReactDOM.render(
   <React.StrictMode>
-    <HttpCallComponent/> 
+    <StateComponent/> 
   </React.StrictMode>,
   document.getElementById('root')
 );
