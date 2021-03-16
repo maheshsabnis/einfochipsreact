@@ -384,14 +384,14 @@ config?: AxiosRequestConfig
       2. Hooks
          1. State
             - useState(initState, callback-To-Mutate-The-state)
-            - function useState<S>(initialState: S | (() => S)): [S, Dispatch<SetStateAction<S>>];
-               - the 'S' is the State Type
+            - function useState<T>(initialState: T | (() => T)): [T, Dispatch<SetStateAction<T>>];
+               - the 'T' is the State Type
                   - initialState, the initial value of the teh state
                   - ()=>S
                      - Mutate the state based on Event / logic
-                     -  Dispatch<SetStateAction<S>>
+                     -  Dispatch<SetStateAction<T>>
                         - Dispatch, the Event Raised on Element thatb is bind with the state e.g. if UI element is inpue:text the Dispatch will be 'onChange'
-                        -  SetStateAction<S>
+                        -  SetStateAction<T>
                            - The Callback method that will be invoked for the event that will be used to mutate the state means overwrite or mutate previous state with new states 
          2. Context
          3. Effects
