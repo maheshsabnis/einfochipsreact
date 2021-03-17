@@ -394,6 +394,236 @@ config?: AxiosRequestConfig
                         -  SetStateAction<T>
                            - The Callback method that will be invoked for the event that will be used to mutate the state means overwrite or mutate previous state with new states 
          2. Context
+            - Mechansim of passing data across components more efficient than 'props'
+            - The parent can decide to which child component the data is to be shared 
+            - Create a Context object with default value
+               - Use 'createContext(<Default-Value>)' object from 'react'
+                  - Default-Value is the value that can be shared
+                  - createContext<T>
+                     - T is any type of data can that can be shared
+                        - T, can be Object, {}, {{<Complex-JSON-Object>}}, [], etc.
+                  - createContext<T>(): Context<T>
+                     - Context<T> is an interface
+                        - Provider: used by the Sender Component or Parent Component that wants to send data
+                        - <ContextObject.Provider value={}>, the 'value' is the object to be send to ChildComponent
+                              - value={[] / Object / {{}}}
+                            <ChildComponent>
+                        </ContextObject.Provider>       
+            - To subscribe to the Context for reading value(s) use the 'useContext' hook
+               - useContext(<CONTEXT-OBJECT>)
+                  - will provide the subscription to the context to consume the data  
+
+``` javascript
+// creating context
+import {createContext} from 'react';
+// the context with the default value as 'null'
+export const DataContext = createContext(null);
+```
+
+# The Table Component having Simple Context Data
+``` javascript
+import React, {useContext} from 'react';
+
+// import the COntext
+import { DataContext } from "./datacontext";
+
+const TableContextComponent=()=>{
+  // subscribe to the Context to read the data
+  const consumeValue = useContext(DataContext);
+
+  if(consumeValue === undefined || consumeValue.length ===0){
+      return (
+          <div> No Records</div>
+      );
+  } else {
+      // process the values received from Context
+      let columns = Object.keys(consumeValue[0]);
+      return(
+        <div className="container">
+        <table className="table table-bordered table-striped">
+          <thead>
+             <tr>
+              {
+                columns.map((header,index)=>(
+                      <th key={index}>{header}</th>
+                  ))
+              }
+             </tr>
+          </thead>
+          <tbody>
+          {
+             consumeValue.map((row, idx)=>(
+                  <tr key={idx} >
+                     {
+                      columns.map((header,index)=>(
+                          <td key={index}>{row[header]}</td>
+                      ))
+                     }
+                  </tr>
+              ))
+          }
+          </tbody>
+        </table>
+      </div>
+      );
+  }
+};
+
+export default TableContextComponent;
+```
+
+# Table Component with Complex COntext Data
+
+``` javascript
+import React, {useContext} from 'react';
+
+// import the COntext
+import { DataContext } from "./datacontext";
+
+const TableContextEventComponent=()=>{
+  // subscribe to the Context to read the data
+  const consumeValue = useContext(DataContext);
+  // consmeValue={{collection,callback}};
+
+  // read the first key from the DataContext
+  const collection = consumeValue[Object.keys(consumeValue)[0]]; // read array
+
+  // read the callback
+  const callback = consumeValue[Object.keys(consumeValue)[1]]; // function for dispatchAction
+
+  if(collection === undefined || collection.length ===0){
+      return (
+          <div> No Records</div>
+      );
+  } else {
+      // process the values received from Context
+      let columns = Object.keys(collection[0]);
+      return(
+        <div className="container">
+        <table className="table table-bordered table-striped">
+          <thead>
+             <tr>
+              {
+                columns.map((header,index)=>(
+                      <th key={index}>{header}</th>
+                  ))
+              }
+             </tr>
+          </thead>
+          <tbody>
+          {
+             collection.map((row, idx)=>(
+                  <tr key={idx}  onClick={()=>callback(row)}>
+                     {
+                      columns.map((header,index)=>(
+                          <td key={index}>{row[header]}</td>
+                      ))
+                     }
+                  </tr>
+              ))
+          }
+          </tbody>
+        </table>
+      </div>
+      );
+  }
+};
+
+export default TableContextEventComponent;
+```
+
+# State Component with Hooks and Context
+``` javascript
+import React, {useState} from 'react'
+
+// impporting DataContext
+import { DataContext } from "./datacontext";
+
+import ListComponent from './listcomponent';
+import TableContextComponent from './tableContextComponent';
+import TableContextEventComponent from "./tableContextEventComponent";
+
+const StateComponent=()=>{
+    // the dept is the state property which is an object with proeprties
+    // defined using useState() i.e. DeptNo, DeptName, Location 
+    const [dept, updateDept] =useState({DeptNo:0,DeptName:'', Location:''});
+    // the state property of the type array 
+    const [depts, addDept] = useState([]);
+    const locations = ['Pune', 'Mumbai', 'Vadodara', 'Ahmedabad'];
+
+    const save=()=>{
+        // mutate the 'depts' array using the data from the dept object
+        addDept([...depts, dept]);
+    };
+
+    const clear=()=>{
+        updateDept({DeptNo:0,DeptName:'', Location:''});
+    };
+
+
+    return (
+        <div className="container">
+          <div className="form-group">
+            <label>DeptNo</label>
+            {/* updateDept({...dept, DeptNo:parseInt(evt.target.value)}) 
+           means update the same 'dept' object with its DeptNo property using 
+           value entered into text element
+        */}
+            <input type="text" className="form-control" value={dept.DeptNo}
+             onChange={(evt)=> updateDept({...dept, DeptNo:parseInt(evt.target.value)})}/>
+          </div>
+          <div className="form-group">
+            <label>DeptName</label>
+            <input type="text" className="form-control" value={dept.DeptName}
+            onChange={(evt)=> updateDept({...dept, DeptName:evt.target.value})}/>
+          </div>
+          <div className="form-group">
+          <label>Location</label>
+
+           <ListComponent stateProp={dept.Location}
+           dataSource={locations}
+           emitValue={(data)=>updateDept({...dept, Location:data})}></ListComponent> 
+
+
+         {/* <select className="form-control" value={dept.Location}
+          onChange={(evt)=> updateDept({...dept, Location:evt.target.value})}>
+            {
+                locations.map((loc,idx)=>(
+                    <option key={idx} value={loc}>{loc}</option>
+                ))
+            }
+          </select>
+        */}
+
+        </div>
+        <div className="form-group">
+         <input type="button" value="Save" className="btn btn-success" onClick={save}/>
+         <input type="button" value="Clear" className="btn btn-warning" onClick={clear}/>
+        </div>
+        <hr/>
+        <div className="container">
+          {/* Providing 'depts' as 'value' of Context */}
+          <DataContext.Provider value={depts}>
+            <TableContextComponent></TableContextComponent>
+          </DataContext.Provider>
+        </div>
+         <hr/>
+         <h4>Passing data and Callback using context so that event from child can be listened</h4>
+         {/* Passing array and  callback. This callback
+          will be used to subscribe to event emitted by child component*/}
+         <DataContext.Provider value={{depts, updateDept}}>
+          <TableContextEventComponent></TableContextEventComponent>
+        </DataContext.Provider>
+        </div>
+    );
+
+};
+
+
+export default StateComponent;
+```
+
+
          3. Effects
          4. Custom Hooks
    
@@ -445,3 +675,4 @@ config?: AxiosRequestConfig
     - Generate a Table showing the LIst of Products by creating a TableComponent using Functional Component
       - This table component must provide facility to 'sort' product records whren the column is clicked
       - The Table component can delete row based on CanDelete set to true
+3. Modify the DropDown Component to accept Records to show to generate the options and this component must provide the selected option value back to the parent component

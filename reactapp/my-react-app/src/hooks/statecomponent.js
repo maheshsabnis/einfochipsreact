@@ -1,5 +1,12 @@
 import React, {useState} from 'react'
- import ListComponent from './listcomponent';
+
+// impporting DataContext
+import { DataContext } from "./datacontext";
+
+import ListComponent from './listcomponent';
+import TableContextComponent from './tableContextComponent';
+import TableContextEventComponent from "./tableContextEventComponent";
+
 const StateComponent=()=>{
     // the dept is the state property which is an object with proeprties
     // defined using useState() i.e. DeptNo, DeptName, Location 
@@ -59,10 +66,18 @@ const StateComponent=()=>{
         </div>
         <hr/>
         <div className="container">
-           <strong>
-             {JSON.stringify(depts)}
-           </strong>
+          {/* Providing 'depts' as 'value' of Context */}
+          <DataContext.Provider value={depts}>
+            <TableContextComponent></TableContextComponent>
+          </DataContext.Provider>
         </div>
+         <hr/>
+         <h4>Passing data and Callback using context so that event from child can be listened</h4>
+         {/* Passing array and  callback. This callback
+          will be used to subscribe to event emitted by child component*/}
+         <DataContext.Provider value={{depts, updateDept}}>
+          <TableContextEventComponent></TableContextEventComponent>
+        </DataContext.Provider>
         </div>
     );
 
