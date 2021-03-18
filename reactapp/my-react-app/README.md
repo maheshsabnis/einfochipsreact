@@ -382,6 +382,8 @@ config?: AxiosRequestConfig
             - Working with Compositional components (aka component re-usability)
             - Parent Child Relationships         
       2. Hooks
+         - The Hook cannot be called / declared inside function
+         - It can be declared and called at functional component level or in the custom hook
          1. State
             - useState(initState, callback-To-Mutate-The-state)
             - function useState<T>(initialState: T | (() => T)): [T, Dispatch<SetStateAction<T>>];
@@ -625,7 +627,198 @@ export default StateComponent;
 
 
          3. Effects
-         4. Custom Hooks
+            - The 'useEffet', used to define the long running processes
+               - AJAX 
+            - useEffect(callback, depednency Parameters)
+               - callback
+                  - function that is executing long running tasks or async tasks and update state object
+                     - state update will re-render the part of  HTML 
+                  - the callnack function in the useEffect() will be executed again and again for every change in the state  
+               -  depednency Parameters
+                  - this parameter will inform the useEffect() that, the state is changed the renderinging is completed, and now useEffect() can complete its execution or stop  
+                     - This is generally an empty array that represents all state properties for the component 
+               - example syntax
+                  - useEffect(()=>{},[]);
+                     - ()=>{<The executions similar to 'componentDidMount'>}  
+                     - [] depednency parameter     
+            - useEffect(callback with return value, depednency Parameters)   
+               - useEffect(()=>{<CODE-FOR-componentDidMount>, return ()=>{<CODE-FOR-componentWillUnMount>} },[])
+                  - useEffect, is a combination of componentDidMount() and componentWillUnMount()  
+
+# the Ajax calls
+``` javascript
+import React, {useState,useEffect} from 'react';
+import { DataContext } from "./datacontext";
+import TableContextComponent from './tableContextComponent';
+import { HttpService } from "./../services/httpservice";
+
+const UseEffectAjaxComponent=()=>{
+    const [products, getProducts] = useState([]);
+    const serv = new HttpService();
+    useEffect(()=>{
+        serv.getData().then((response)=>{
+            getProducts(response.data);
+        }).catch((error)=>{
+            console.log(`Error ${error.message}`);
+        });
+    },[]); // empty array dependency parameter to indicate that the state is updated 
+
+
+    return(
+        <div className="container">
+            <DataContext.Provider value={products}>
+               <TableContextComponent></TableContextComponent>
+            </DataContext.Provider>
+        </div>
+    );
+};
+
+export default UseEffectAjaxComponent;
+```
+
+# UseEffect for COmponentDIdMount and ComponentWillunMount
+
+``` javascript
+import React, {useEffect, useState} from 'react';
+ 
+import TableContextComponent from './../tableContextComponent';
+const MouseMoveComponent=()=>{
+    const [x,setX] = useState(0);
+    const [y,setY] = useState(0);
+    
+    const getMousePosition=(evt)=>{
+        setX(evt.clientX);
+        setY(evt.clientY);
+    };
+ 
+    useEffect(()=>{
+        // code for componentDidMount()
+        console.log('Mouse Move called...');
+        window.addEventListener('mousemove',getMousePosition);
+        return ()=>{
+            // code for componentWillUnMount
+            console.log('component is unLoaded');
+            window.removeEventListener('mousemove',getMousePosition);
+        };
+    },[]);
+
+    return(
+        <div>
+            Use Effect x = {x} and y = {y}
+            <hr/>
+            
+        </div>
+    );
+};
+
+export default MouseMoveComponent;
+
+import React, {useState} from 'react'
+
+import MouseMoveComponent from './mousemovecomponent';
+
+
+const ToggleComponent=()=>{
+    const [show, updateShow]= useState(true);
+  return(
+    <div>
+      <h1>The Demo for UseEffect for Lifecycle</h1>
+
+      <button onClick={()=>updateShow(!show)}>Toggle</button>
+      {
+          show && <MouseMoveComponent></MouseMoveComponent>
+      }
+      <hr/>
+      <div>
+        <strong>The Toggle Component</strong>
+      </div>
+    </div>
+  );
+};
+
+export default ToggleComponent;
+```
+
+
+         4. Other Hooks
+            - useReducer()
+               - State management without using redux
+               - provided by React as a possible alternative for redux but not replace redux
+               - this hook will manage the state transition information in the React Functional Component
+                  - initlaState - to - finalState OR initialState - to - errorState
+                  - Technically in the Redux Terminology
+                     - initialState - to - newState OR previousState -  to - newState
+                  - useReducer() needs some events (aka actions) to be dispatched from the UI
+                     - these actions will activate the reducer and update the state accordingly   
+            - useRef()
+               - Use to extract value of an element using 'ref'
+                  - like document.getElementById()
+                     - useState() is preferred
+            - useMemoization()
+               - used for performance optimization
+                  - dependant of Browser's feature of performance
+                  - not currently standard for guarantee for optimization            
+         5. Custom Hooks
+            - Used for defining the custom operations by using standard Hook with additional execution
+            - Use Custom Hooks for
+               - executing an additional logic for the standard hook instaed of writing it inside the component
+               - Encapsulating long running operations (e.g. useEffect) seperate from the component but directly receiving the response into the component 
+# The cusgtom Hook to encapsulate the useEffct()
+
+``` javascript
+import React, {useEffect, useReducer, useState} from 'react';
+import axios from 'axios';
+
+// the custom hook that is encapsulatin the useEffect()
+const useAxios =(url)=>{
+    const [data, updateData] = useState([]);
+
+    useEffect(()=>{
+        axios(url).then((response)=>{
+            console.log(`Received Data ${response.data}`);
+            updateData(response.data);
+        }) 
+        .catch((error)=>{
+            console.log(`Error Occured ${error.message}`);
+        });
+    },[]);
+
+    return data;
+};
+
+
+const UseReducerCustomHookComponent=()=>{
+    // the 'useAxios' will be the custom hook that will encapsulate the 
+    // useEffect() with its execution
+    const data = useAxios("https://apiapptrainingnewapp.azurewebsites.net/api/Products");
+    if(data === undefined){
+        return(
+            <div>
+               <h2>No Data Received</h2>
+            </div>
+        );
+    }
+
+    return (
+        <div className="container">
+            <h2>Data Received from call</h2>
+             <ul>
+              {
+                  data.map((d,i)=>(
+                      <li key={i}>
+                        {JSON.stringify(d)}
+                      </li>
+                  ))
+              }
+             </ul>
+        </div>
+    );
+};
+
+export default UseReducerCustomHookComponent;
+
+
+```                   
    
 2. Redux  
    1. Concept of Application State Management
@@ -676,3 +869,6 @@ export default StateComponent;
       - This table component must provide facility to 'sort' product records whren the column is clicked
       - The Table component can delete row based on CanDelete set to true
 3. Modify the DropDown Component to accept Records to show to generate the options and this component must provide the selected option value back to the parent component
+4. Create a custom hook that will self-Validate the State properties (VERY Important)
+   - e.g. if a state property expects a positive numeric value but the -ve value is assigned to it the the customhook should return the error 
+5. Modify the ProductStateComponent using useEffect() for performing AJAX Calls   

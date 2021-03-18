@@ -14,6 +14,7 @@ const [result,updateResult] = useState(0);
 
 
  const click=()=>{
+   
     alert('clicked');
  };   
 

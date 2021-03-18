@@ -26,6 +26,13 @@ import DemoComponent from './functionalcomponents/funcComponent';
 import SimpleHookComponent from './hooks/simplehookcomponent';
 
 import StateComponent  from './hooks/statecomponent';
+
+import UseEffectAjaxComponent from './hooks/useEffectAjax';
+
+import ToggleComponent from './hooks/useeffectlifecycle/toggleComponent';
+
+import UseReducerCustomHookComponent from './hooks/useReducerForCustomHookComponent';
+
 // this will mount the component with its 
 // compiled HTML on Browser and render it
 // React.StrictMode, means that the string JS language
@@ -45,7 +52,7 @@ let parentMessage = "Hay Componant!!! I am message from Parent";
 
 ReactDOM.render(
   <React.StrictMode>
-    <StateComponent/> 
+    <UseReducerCustomHookComponent/> 
   </React.StrictMode>,
   document.getElementById('root')
 );
