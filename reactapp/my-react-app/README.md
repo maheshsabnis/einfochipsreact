@@ -820,6 +820,27 @@ export default UseReducerCustomHookComponent;
 
 ```                   
    
+# Routing 
+
+- npm install --save react-router-dom
+
+- Route
+   - Class used to define the route expression
+      - exact, used for Route Expression match when the route query is raised
+      - path, the route url expression
+      - component, the name of the component
+- Switch
+   - Used to contain the Route Table loaded on DOM with Route Expression Information
+- Redirect
+   - Redirect to default page if no route expression match
+      - the 'to' property that defines an expression for routing
+- Link
+   - Query to route table
+      - the 'to' property to contain expression to query
+
+- BrowserRouter
+   - Platform object tat provides Routing navigation for React Components by loading the Component containing Route Table
+   - This class also provides the borowser histroy object that will be used for event based route navigation
 2. Redux  
    1. Concept of Application State Management
       1. Actions
@@ -872,3 +893,8 @@ export default UseReducerCustomHookComponent;
 4. Create a custom hook that will self-Validate the State properties (VERY Important)
    - e.g. if a state property expects a positive numeric value but the -ve value is assigned to it the the customhook should return the error 
 5. Modify the ProductStateComponent using useEffect() for performing AJAX Calls   
+
+6. Complete the Routing App for Single page App dform Products
+   - Add  a new Expression for Delete Product this has to show the Delete component view that user will verify the product before deleting
+   - Create / Edit / Delete component must have link for 'Back to List' to go back to ProductList Page
+   -  Create / Edit / Delete component must have  'Cancel' button to go back to the PorductList page
