@@ -25,7 +25,7 @@ const MainRoutingComponent=()=>{
             {/* Define a Route Table */}
             <div>
              <Switch>
-                <Route exact path="/" component={ListProductComponent}></Route>
+                <Route exact path="/" component={ListProductComponent} ></Route>
                 <Route exact path="/create" component={CreateProductComponent}></Route>
                 <Route exact path="/edit/:id" component={EditProductComponent}></Route>
                 {/* The Default route if expression does not match */}
