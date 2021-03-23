@@ -842,11 +842,198 @@ export default UseReducerCustomHookComponent;
    - Platform object tat provides Routing navigation for React Components by loading the Component containing Route Table
    - This class also provides the borowser histroy object that will be used for event based route navigation
 2. Redux  
-   1. Concept of Application State Management
+   1. Install redux object model
+      - redux
+         - the library that contains objects like
+            - createstore
+               - create a gloab application state for the react application using redux
+            - combinereducer
+               - The object that will manage updates into the store object based on actions that is dispatched
+      - react-redux
+         - the integration between react object model and redux
+            - Provider    
+               - The platform for executing React and Redux together
+                  - This is used to provide the 'store' for all react components so that they can use store to read/write data
+            - React-Redux Hooks
+               - useDispatch()
+                  - Hook to dispatch an action from the View or from the Middleware
+               - useSelector()
+                  - A Hook that is used to subscribe to store and read data from store when it is updated by reducer(s)   
+            - React-Redux Older Object
+               - mapDispatchToProps (replaced by 'useDispatch()' from react 16.8 onwards from  Redux 4.0+)
+                  - a funciton that is used to dispatch the action from View or from the middleware  
+                     - this maps the action to View Elements using 'props' object    
+               - mapStateToProps (replaced by 'useSelector()' from Redux 4.0+)
+                  - The 'State' (aka data) from the store will be mapped with 'props' so that the data can be shown in component           
+   2. Concept of Application State Management
       1. Actions
+         - these are the functions those will be linked with an event from View using useDispatch() 
+         - these functions indicates that what is going to happen
+         - these function may accept input parameter which is knows as action 'payload'  
+            - this means that the input values send from View to Store
+            - if an action is dispatched from middleware, then payload will be data received from AJAX calls and this will be put into the store 
+``` javascript
+const addEmployee=(employee)=>{
+    // write some logic
+    employee.EmpName = employee.EmpName.toUpperCase();
+    return {
+        type: 'ADD_EMPLOYEE', // the output action
+        employee // the output data return when the actionn isn executed 
+    };
+};
+
+export default addEmployee;
+```
       2. Reducers
+         - This is a 'pure funciton', (the funciton have same input and output parameter)
+            - This will be initialized at the application level to monitor the action dispatched and as a resultant output action, it will update teh state in store
+            - This pure function will accept
+               - The 'instail state in the store', aka the state object
+               - The 'dispatched action'
+            - The reducer will return the 'modified state' object    
+         - NOTED POINTS
+            - we can have multiple reducers in application but all these reducers must be combined together into single reducers object for better management 
+
+``` javascript
+import { combineReducers } from "redux";
+
+// define a pure function that 
+// action.type, is the types that is returned from the action that is dispatched
+export const addEmployeeReducer=(state, action)=>{
+    switch(action.type){
+        case 'ADD_EMPLOYEE':
+              return{
+                  // reading the output returned from action method returning type as 'ADD_EMPLOYEE'
+                  // and updateing it in state object 
+                  employee: action.employee
+              }; 
+        default:
+              return state;        
+    }
+};
+
+// initial state for reding employees from store will be an empty array
+export const listEmployeesReducer=(state=[], action)=>{
+    switch(action.type){
+        case 'ADD_EMPLOYEE':
+            // the current reducer wil call addEmployeeReducer
+            // to retrive the modified state after adding an employee in it
+            // and the state will be mutated into store and the modified state from store 
+            // will be returned 
+            return [...state, addEmployeeReducer(undefined, action)];
+        default:
+            return state;    
+    };
+};
+
+// make the above pure functions as reducer functions by using 'combineReducers()' object
+// from redux package so that they will be used as application level to montor
+// all actions those are dispatched
+
+// 1. the 'reducers' object will be loaded at application level
+// to initialize the store
+
+// 2. all components those are subscribing to 'store', when dispatch any action
+// action, the 'compbinereducers' will ask the reducer funciton inside it to
+// monitor all actions, execute them and collect the return values so that the state in store
+// can be updated
+
+// 3. any component that has the store subscription will be able to read data from store
+// using selector  
+
+const reducers = combineReducers({listEmployeesReducer});
+export default reducers;
+
+
+```
+
       3. Store
+``` javascript
+// importing React object  
+import React from 'react';
+import ReactDOM from 'react-dom';
+ 
+
+import './../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
+// importing redux
+// createStore, used to create a store
+import { createStore } from "redux";
+
+// Provider, the platform to integrate react with redux
+import { Provider } from "react-redux";
+
+import reducers from './reduxapp/reducers/reducers';
+
+
+import MainReduxComponent from './reduxapp/mainreduxcomponent';
+
+// the React.js bundling and build utility provided by create-react-app
+import reportWebVitals from './reportWebVitals';
+
+// create a store
+// first parameter is 'reducers'
+// second parmeter is 'enhancer', this is the REDUX_TOOLS for simulating redux store in browser
+
+let store = createStore(reducers,
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__());
+// Provider Has 'store', 
+// any component(s) executes under 'Provider' will have store subscription and hence any acrion
+// displatched by any component will monitored by reducer because reduecer is handling the store
+// using 'createStore' 
+// 'store' has reducers
+// 'reduecrs' are monitoring actoins to update store
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}>
+        <MainReduxComponent/>
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+
+```
+
+
       4. Middlewares  
+      5. Views aka components
+         - UI that will be subscribed with the Store
+``` javascript
+import React from 'react';
+import { useDispatch,useSelector } from "react-redux";
+import AddEmployeeComponent from './views/addemployeecomponent';
+import ListEmployeesComponent from './views/listemployees';
+
+import addEmployee from './actoins/actions';
+
+
+const MainReduxComponent=()=>{
+
+    // initialize the dispatch to displatch action
+    let dispatch = useDispatch();
+    // using selector query to the store
+    // read data from store 
+    let employees = useSelector(state=>state.listEmployeesReducer);
+    return (
+        <div className="container">
+        <h1>The Redux Application</h1>
+            <AddEmployeeComponent AddAction={(employee)=>dispatch(addEmployee(employee))}></AddEmployeeComponent>
+            <hr/>
+            <ListEmployeesComponent
+             employeeList={employees}></ListEmployeesComponent>
+        </div>
+    );
+};
+
+export default MainReduxComponent;
+
+```
+
 
 
 
@@ -898,3 +1085,5 @@ export default UseReducerCustomHookComponent;
    - Add  a new Expression for Delete Product this has to show the Delete component view that user will verify the product before deleting
    - Create / Edit / Delete component must have link for 'Back to List' to go back to ProductList Page
    -  Create / Edit / Delete component must have  'Cancel' button to go back to the PorductList page
+
+7. create a new action that will be dispatched when the table row is clicked, this action will accept the selected employee data for the row and will query to store so that the selected data will be displayed in textboxes.   
