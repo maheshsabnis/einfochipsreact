@@ -850,6 +850,15 @@ export default UseReducerCustomHookComponent;
             - combinereducer
                - The object that will manage updates into the store object based on actions that is dispatched
       - react-redux
+         - The 'connect()' object
+            - Used to map dispatched actions and Store to 'props' of the component
+               - mapDispatchToProps
+                  - The JSON object (sometimes used as function returnig the props) that is used to map an event of the Component with the action method and this dispateched action will be bind with the UI element's event using props
+                     - Note: Can be Replaced by the 'useDispatch()' hook
+               - mapStateToProps
+                  - The JSON object (sometimes used as function returnig the props), used to subscribe the component with the Store and read the 'state' of the store and map with 'props' so that component can read data from the store
+                     - Note: Can be Replaced using 'useSelector()' hook 
+            - connect(mapStateToProps, mapDispatchToPros)(Component);             
          - the integration between react object model and redux
             - Provider    
                - The platform for executing React and Redux together
@@ -1034,7 +1043,29 @@ export default MainReduxComponent;
 
 ```
 
-
+# Using SAGA middleware in React-Redux app
+- Install saga and redux-saga
+   - npm install --save saga redux-saga
+- Saga Object Model
+   - redux-saga
+      - createSagaMiddleware
+         - enable the SAGA middleware for the current React-Redux app
+         - Help in monitoring all application actions for Input / Ouput action dispatch
+            - Input / Ouput action dispatch, for each input action there is an output action
+   - redux-saga/effects
+      - the package that contains methods to manage (or encapsulate) all async calls and read responses from these async calls
+         -          
+   - react-redux for SAGA or Middleware
+      - applyMiddleware
+         - Load the middleware at the root of the application
+         - The Middleware must be running contineously 
+             - createSagaMiddleware().run(<SAGA-OBJECT-MODEL>)
+               - SAGA-OBJECT-MODEL
+                  - The Object that will keep executing the 'generator-functions' at the application level so that the reducers can use it while updating the store
+                  - 'generator-functions'
+                     - These are the functions those are used for Monitoring Input Actions, Perform Sync/Asyc calls and return Output action
+   - Configuring the Store using Reducer and SAGA Middleware                
+       - let store = createStore(<reducer>, applyMiddleware(createSagaMiddeware()));             
 
 
 
